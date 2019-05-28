@@ -6,7 +6,7 @@ public class SumMultipleThreads implements Runnable{
 
 	long from, to, totalSum;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 		long to = 10000000;
 		ArrayList<SumMultipleThreads> sumRunners = new ArrayList<SumMultipleThreads>();
@@ -28,12 +28,14 @@ public class SumMultipleThreads implements Runnable{
 
 		ArrayList<Thread> threadsForSubSum = new ArrayList<Thread>();
 
-		for(SumMultipleThreads runner:sumRunners) {
+		for(SumMultipleThreads runner:sumRunners) { 
 			Thread thread = new Thread(runner);
-			thread.start();
+			thread.start();//각 스레드 별로 from 값 부터 to 값까지 모두 더한 뒤에 계산했다고 출력해주는 기능을 수행
+			thread.join(1000); 
+			//이때 join은 앞의 스레드가 출력할때까지 기다려 주기 위해서 1000 million seconds를 기다렸다가 실행하므로
+			//순서대로 출력되게 됨.
 			threadsForSubSum.add(thread);
 		}
-
 		long grandTotal = 0;
 		for(SumMultipleThreads runner:sumRunners) {
 			grandTotal += runner.totalSum;
